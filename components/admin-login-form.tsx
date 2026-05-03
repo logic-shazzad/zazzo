@@ -48,8 +48,8 @@ export function AdminLoginForm() {
         Login to manage the store
       </h1>
       <p className="mt-4 text-sm leading-6 text-slate-600">
-        Sign in with your configured admin credentials. For production, keep
-        `ADMIN_EMAIL` and `ADMIN_PASSWORD` set in your deployment environment.
+        Sign in with the fixed owner account or any moderator credentials added
+        from the Admin Manager section.
       </p>
       <div className="mt-8 grid gap-5">
         <label className="grid gap-2 text-sm font-medium text-slate-700">

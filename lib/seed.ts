@@ -165,6 +165,7 @@ export const seedData: StoreData = {
     deliveryCharge: 120
   },
   branding: defaultBranding,
+  moderators: [],
   customers: [
     {
       id: "CUS-1001",

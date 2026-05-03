@@ -7,6 +7,7 @@ import {
   DashboardSummary,
   DeliveryStatus,
   HomepageCollectionCard,
+  ModeratorUser,
   Order,
   PaymentStatus,
   Product,
@@ -119,6 +120,7 @@ function normalizeStore(data: StoreData & {
   products: Array<Product & { image?: string; images?: string[] }>;
   heroDescription?: string;
   branding?: Partial<StoreBranding>;
+  moderators?: ModeratorUser[];
 }): StoreData {
   return {
     ...data,
@@ -132,7 +134,8 @@ function normalizeStore(data: StoreData & {
     branding: {
       ...defaultBranding,
       ...(data.branding ?? {})
-    }
+    },
+    moderators: Array.isArray(data.moderators) ? data.moderators : []
   };
 }
 
@@ -327,6 +330,15 @@ function nextOrderId(orders: Order[]) {
   }, 1023);
 
   return `NC-${max + 1}`;
+}
+
+function nextModeratorId(moderators: ModeratorUser[]) {
+  const max = moderators.reduce((value, moderator) => {
+    const numeric = Number(moderator.id.replace("MOD-", ""));
+    return Number.isFinite(numeric) ? Math.max(value, numeric) : value;
+  }, 1000);
+
+  return `MOD-${String(max + 1).padStart(4, "0")}`;
 }
 
 function isSameDay(date: Date, reference: Date) {
@@ -624,6 +636,64 @@ export async function updateStoreBranding(branding: StoreBranding) {
 
     store.branding = normalized;
     return store.branding;
+  });
+}
+
+export async function getModeratorUsers() {
+  const store = await readStore();
+  return [...store.moderators].sort((a, b) => a.email.localeCompare(b.email));
+}
+
+export async function createModeratorUser(input: {
+  email: string;
+  password: string;
+  ownerEmail: string;
+}) {
+  return queueWrite((store) => {
+    const email = input.email.trim().toLowerCase();
+    const password = input.password.trim();
+    const ownerEmail = input.ownerEmail.trim().toLowerCase();
+
+    if (!email || !password) {
+      throw new Error("Moderator email and password are required.");
+    }
+
+    if (email === ownerEmail) {
+      throw new Error("Owner email is fixed and cannot be added as a moderator.");
+    }
+
+    const alreadyExists = store.moderators.some(
+      (moderator) => moderator.email.toLowerCase() === email
+    );
+
+    if (alreadyExists) {
+      throw new Error("A moderator with this email already exists.");
+    }
+
+    const moderator: ModeratorUser = {
+      id: nextModeratorId(store.moderators),
+      email,
+      password,
+      createdAt: new Date().toISOString()
+    };
+
+    store.moderators.unshift(moderator);
+    return moderator;
+  });
+}
+
+export async function deleteModeratorUser(id: string) {
+  return queueWrite((store) => {
+    const index = store.moderators.findIndex((moderator) => moderator.id === id);
+    if (index === -1) {
+      throw new Error("Moderator not found.");
+    }
+
+    const [removed] = store.moderators.splice(index, 1);
+    return {
+      success: true,
+      removedId: removed.id
+    };
   });
 }
 

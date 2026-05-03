@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminRole } from "@/lib/admin-auth";
 import { ZazzoLogo } from "@/components/zazzo-logo";
 
 const links = [
@@ -11,7 +12,12 @@ const links = [
   { href: "/admin/settings", label: "Settings" }
 ];
 
-export function AdminSidebar() {
+export function AdminSidebar({ role }: { role: AdminRole | null }) {
+  const visibleLinks =
+    role === "owner"
+      ? [...links, { href: "/admin/admin-manager", label: "Admin Manager" }]
+      : links;
+
   return (
     <aside className="panel h-fit p-5">
       <div className="rounded-[22px] bg-pine p-5 text-white">
@@ -23,7 +29,7 @@ export function AdminSidebar() {
         </p>
       </div>
       <nav className="mt-6 space-y-2">
-        {links.map((link) => (
+        {visibleLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}

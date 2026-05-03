@@ -52,6 +52,13 @@ export type StoreBranding = {
   socialWhatsappLabel: string;
 };
 
+export type ModeratorUser = {
+  id: string;
+  email: string;
+  password: string;
+  createdAt: string;
+};
+
 export type CartItem = {
   productId: number;
   quantity: number;
@@ -100,6 +107,7 @@ export type StoreData = {
   homepageCollections: HomepageCollectionCard[];
   settings: StoreSettings;
   branding: StoreBranding;
+  moderators: ModeratorUser[];
 };
 
 export type DashboardStat = {
