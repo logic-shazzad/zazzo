@@ -22,7 +22,7 @@ const supportLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 border-t border-slate-200/80 bg-[linear-gradient(180deg,#fbf8ef_0%,#fffdf8_100%)]">
+    <footer className="mt-auto border-t border-slate-200/80 bg-[linear-gradient(180deg,#fbf8ef_0%,#fffdf8_100%)] pt-16">
       <div className="shell py-12 sm:py-14">
         <div className="panel overflow-hidden rounded-[28px] border border-[#f3e5b3] bg-white/90 shadow-[0_24px_80px_rgba(17,17,17,0.06)]">
           <div className="grid gap-10 px-5 py-8 sm:px-8 sm:py-10 lg:grid-cols-[1.3fr_0.9fr_0.9fr_1fr] lg:gap-8">

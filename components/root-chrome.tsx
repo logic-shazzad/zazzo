@@ -11,7 +11,7 @@ export function RootChrome({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
       {!isAdmin ? <FloatingContactWidget /> : null}
-      <div className="flex-1">{children}</div>
+      {children}
       {!isAdmin ? <SiteFooter /> : null}
     </div>
   );
