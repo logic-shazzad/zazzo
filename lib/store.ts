@@ -466,6 +466,51 @@ export async function updateOrderStatus(
   });
 }
 
+export async function deleteOrder(id: string) {
+  return queueWrite((store) => {
+    const orderIndex = store.orders.findIndex((order) => order.id === id);
+    if (orderIndex === -1) {
+      throw new Error("Order not found");
+    }
+
+    const order = store.orders[orderIndex];
+    store.orders.splice(orderIndex, 1);
+
+    for (const item of order.items) {
+      const productIndex = store.products.findIndex((product) => product.id === item.productId);
+      if (productIndex !== -1) {
+        store.products[productIndex] = {
+          ...store.products[productIndex],
+          inventory: store.products[productIndex].inventory + item.quantity
+        };
+      }
+    }
+
+    const customerIndex = store.customers.findIndex((customer) => customer.id === order.customerId);
+    if (customerIndex !== -1) {
+      const remainingOrders = store.orders.filter(
+        (existingOrder) => existingOrder.customerId === order.customerId
+      );
+      const totalSpent = remainingOrders.reduce(
+        (sum, existingOrder) => sum + existingOrder.total,
+        0
+      );
+
+      if (!remainingOrders.length) {
+        store.customers.splice(customerIndex, 1);
+      } else {
+        store.customers[customerIndex] = {
+          ...store.customers[customerIndex],
+          totalOrders: remainingOrders.length,
+          totalSpent
+        };
+      }
+    }
+
+    return { success: true, deletedOrderId: id };
+  });
+}
+
 export async function updateHomepageCollections(
   cards: HomepageCollectionCard[],
   heroDescription?: string

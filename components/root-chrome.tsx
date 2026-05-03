@@ -9,10 +9,10 @@ export function RootChrome({ children }: { children: React.ReactNode }) {
   const isAdmin = pathname.startsWith("/admin");
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       {!isAdmin ? <FloatingContactWidget /> : null}
-      {children}
+      <div className="flex-1">{children}</div>
       {!isAdmin ? <SiteFooter /> : null}
-    </>
+    </div>
   );
 }

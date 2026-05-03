@@ -41,6 +41,29 @@ export function AdminOrdersManager({ initialOrders }: { initialOrders: Order[] }
     setMessage(`Order ${id} updated.`);
   }
 
+  async function removeOrder(id: string) {
+    const shouldDelete = window.confirm(
+      `Delete order ${id}? This will also restore product stock and update customer totals.`
+    );
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    const response = await fetch(`/api/orders/${id}`, {
+      method: "DELETE"
+    });
+
+    const data = (await response.json()) as { message?: string };
+    if (!response.ok) {
+      setMessage(data.message ?? "Unable to delete order.");
+      return;
+    }
+
+    setOrders((current) => current.filter((order) => order.id !== id));
+    setMessage(`Order ${id} deleted.`);
+  }
+
   return (
     <div className="grid gap-6">
       <div className="panel p-6">
@@ -64,6 +87,7 @@ export function AdminOrdersManager({ initialOrders }: { initialOrders: Order[] }
                 <th className="pb-3">Payment</th>
                 <th className="pb-3">Delivery</th>
                 <th className="pb-3">Total</th>
+                <th className="pb-3">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -125,6 +149,15 @@ export function AdminOrdersManager({ initialOrders }: { initialOrders: Order[] }
                   </td>
                   <td className="py-4 align-top font-semibold text-pine">
                     {formatCurrency(order.total)}
+                  </td>
+                  <td className="py-4 align-top">
+                    <button
+                      type="button"
+                      onClick={() => removeOrder(order.id)}
+                      className="rounded-full border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
