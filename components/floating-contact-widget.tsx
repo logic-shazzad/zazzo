@@ -2,14 +2,9 @@
 
 import { useState } from "react";
 import { BrandIcon } from "@/components/brand-icon";
+import { StoreBranding } from "@/lib/types";
 
-const contactInfo = {
-  whatsappNumber: "+8801700000000",
-  phoneNumber: "+8801700000000",
-  facebookPage: "https://facebook.com/zazzo.official"
-};
-
-export function FloatingContactWidget() {
+export function FloatingContactWidget({ branding }: { branding: StoreBranding }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -18,44 +13,44 @@ export function FloatingContactWidget() {
         {open ? (
           <div className="w-[220px] rounded-[20px] border border-white/80 bg-white/96 p-3.5 shadow-[0_24px_70px_rgba(31,41,51,0.16)] backdrop-blur sm:w-[260px] sm:rounded-[24px] sm:p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#F5B800]">
-              Contact ZAZZO
+              {branding.widgetTitle}
             </p>
             <div className="mt-4 space-y-3 text-sm text-slate-700">
               <a
-                href={`https://wa.me/${contactInfo.whatsappNumber.replace(/\D/g, "")}`}
+                href={`https://wa.me/${branding.whatsappNumber.replace(/\D/g, "")}`}
                 target="_blank"
                 rel="noreferrer"
                 className="block rounded-2xl bg-sand px-4 py-3 transition hover:bg-mist"
               >
                 <span className="block text-xs uppercase tracking-[0.2em] text-slate-400">
-                  WhatsApp
+                  {branding.whatsappLabel}
                 </span>
                 <span className="mt-1 block font-semibold">
-                  {contactInfo.whatsappNumber}
+                  {branding.whatsappNumber}
                 </span>
               </a>
               <a
-                href={`tel:${contactInfo.phoneNumber}`}
+                href={`tel:${branding.phoneNumber}`}
                 className="block rounded-2xl bg-sand px-4 py-3 transition hover:bg-mist"
               >
                 <span className="block text-xs uppercase tracking-[0.2em] text-slate-400">
-                  Phone
+                  {branding.phoneLabel}
                 </span>
                 <span className="mt-1 block font-semibold">
-                  {contactInfo.phoneNumber}
+                  {branding.phoneNumber}
                 </span>
               </a>
               <a
-                href={contactInfo.facebookPage}
+                href={branding.facebookPageUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="block rounded-2xl bg-sand px-4 py-3 transition hover:bg-mist"
               >
                 <span className="block text-xs uppercase tracking-[0.2em] text-slate-400">
-                  Facebook
+                  {branding.facebookLabel}
                 </span>
                 <span className="mt-1 block truncate font-semibold">
-                  zazzo.official
+                  {branding.facebookHandle}
                 </span>
               </a>
             </div>

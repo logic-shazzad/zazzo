@@ -3,16 +3,23 @@
 import { usePathname } from "next/navigation";
 import { FloatingContactWidget } from "@/components/floating-contact-widget";
 import { SiteFooter } from "@/components/site-footer";
+import { StoreBranding } from "@/lib/types";
 
-export function RootChrome({ children }: { children: React.ReactNode }) {
+export function RootChrome({
+  children,
+  branding
+}: {
+  children: React.ReactNode;
+  branding: StoreBranding;
+}) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
 
   return (
     <div className="flex min-h-screen flex-col">
-      {!isAdmin ? <FloatingContactWidget /> : null}
+      {!isAdmin ? <FloatingContactWidget branding={branding} /> : null}
       {children}
-      {!isAdmin ? <SiteFooter /> : null}
+      {!isAdmin ? <SiteFooter branding={branding} /> : null}
     </div>
   );
 }

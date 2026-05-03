@@ -1,4 +1,23 @@
-import { StoreData } from "@/lib/types";
+import { StoreBranding, StoreData } from "@/lib/types";
+
+const defaultBranding: StoreBranding = {
+  footerDescription:
+    "ZAZZO brings refined fashion, effortless shopping, and a modern storefront experience designed to feel clean, fast, and premium on every screen.",
+  widgetTitle: "Contact ZAZZO",
+  whatsappLabel: "WhatsApp",
+  whatsappNumber: "+8801700000000",
+  phoneLabel: "Phone",
+  phoneNumber: "+8801700000000",
+  facebookLabel: "Facebook",
+  facebookHandle: "zazzo.official",
+  facebookPageUrl: "https://facebook.com/zazzo.official",
+  supportHours: "10:00 AM - 9:00 PM",
+  socialFacebookLabel: "Fb",
+  socialFacebookUrl: "https://facebook.com/zazzo.official",
+  socialInstagramLabel: "Ig",
+  socialInstagramUrl: "https://instagram.com",
+  socialWhatsappLabel: "Wa"
+};
 
 export const seedData: StoreData = {
   products: [
@@ -145,6 +164,7 @@ export const seedData: StoreData = {
   settings: {
     deliveryCharge: 120
   },
+  branding: defaultBranding,
   customers: [
     {
       id: "CUS-1001",

@@ -11,6 +11,7 @@ import {
   PaymentStatus,
   Product,
   ProductInput,
+  StoreBranding,
   StoreSettings,
   StoreData
 } from "@/lib/types";
@@ -68,6 +69,25 @@ const defaultSettings: StoreSettings = {
   deliveryCharge: 120
 };
 
+const defaultBranding: StoreBranding = {
+  footerDescription:
+    "ZAZZO brings refined fashion, effortless shopping, and a modern storefront experience designed to feel clean, fast, and premium on every screen.",
+  widgetTitle: "Contact ZAZZO",
+  whatsappLabel: "WhatsApp",
+  whatsappNumber: "+8801700000000",
+  phoneLabel: "Phone",
+  phoneNumber: "+8801700000000",
+  facebookLabel: "Facebook",
+  facebookHandle: "zazzo.official",
+  facebookPageUrl: "https://facebook.com/zazzo.official",
+  supportHours: "10:00 AM - 9:00 PM",
+  socialFacebookLabel: "Fb",
+  socialFacebookUrl: "https://facebook.com/zazzo.official",
+  socialInstagramLabel: "Ig",
+  socialInstagramUrl: "https://instagram.com",
+  socialWhatsappLabel: "Wa"
+};
+
 export class StoreUnavailableError extends Error {
   constructor(message = storeUnavailableMessage) {
     super(message);
@@ -98,6 +118,7 @@ function normalizeProduct(product: Product & { image?: string; images?: string[]
 function normalizeStore(data: StoreData & {
   products: Array<Product & { image?: string; images?: string[] }>;
   heroDescription?: string;
+  branding?: Partial<StoreBranding>;
 }): StoreData {
   return {
     ...data,
@@ -107,7 +128,11 @@ function normalizeStore(data: StoreData & {
       data.homepageCollections && data.homepageCollections.length
         ? data.homepageCollections
         : defaultHomepageCollections,
-    settings: data.settings ?? defaultSettings
+    settings: data.settings ?? defaultSettings,
+    branding: {
+      ...defaultBranding,
+      ...(data.branding ?? {})
+    }
   };
 }
 
@@ -569,6 +594,36 @@ export async function updateStoreSettings(settings: StoreSettings) {
     };
 
     return store.settings;
+  });
+}
+
+export async function updateStoreBranding(branding: StoreBranding) {
+  return queueWrite((store) => {
+    const normalized: StoreBranding = {
+      footerDescription: branding.footerDescription.trim(),
+      widgetTitle: branding.widgetTitle.trim(),
+      whatsappLabel: branding.whatsappLabel.trim(),
+      whatsappNumber: branding.whatsappNumber.trim(),
+      phoneLabel: branding.phoneLabel.trim(),
+      phoneNumber: branding.phoneNumber.trim(),
+      facebookLabel: branding.facebookLabel.trim(),
+      facebookHandle: branding.facebookHandle.trim(),
+      facebookPageUrl: branding.facebookPageUrl.trim(),
+      supportHours: branding.supportHours.trim(),
+      socialFacebookLabel: branding.socialFacebookLabel.trim(),
+      socialFacebookUrl: branding.socialFacebookUrl.trim(),
+      socialInstagramLabel: branding.socialInstagramLabel.trim(),
+      socialInstagramUrl: branding.socialInstagramUrl.trim(),
+      socialWhatsappLabel: branding.socialWhatsappLabel.trim()
+    };
+
+    const requiredEntries = Object.entries(normalized).filter(([, value]) => !value);
+    if (requiredEntries.length) {
+      throw new Error("Please complete all branding and contact fields.");
+    }
+
+    store.branding = normalized;
+    return store.branding;
   });
 }
 

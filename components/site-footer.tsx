@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ZazzoLogo } from "@/components/zazzo-logo";
+import { StoreBranding } from "@/lib/types";
 
 const links = [
   { href: "/", label: "Home" },
@@ -8,19 +9,22 @@ const links = [
   { href: "/cart", label: "Bag" }
 ];
 
-const socials = [
-  { href: "https://facebook.com/zazzo.official", label: "Fb" },
-  { href: "https://instagram.com", label: "Ig" },
-  { href: "https://wa.me/8801700000000", label: "Wa" }
-];
-
 const supportLinks = [
   { href: "/products", label: "New Arrivals" },
   { href: "/checkout", label: "Secure Checkout" },
   { href: "/cart", label: "Your Bag" }
 ];
 
-export function SiteFooter() {
+export function SiteFooter({ branding }: { branding: StoreBranding }) {
+  const socials = [
+    { href: branding.socialFacebookUrl, label: branding.socialFacebookLabel },
+    { href: branding.socialInstagramUrl, label: branding.socialInstagramLabel },
+    {
+      href: `https://wa.me/${branding.whatsappNumber.replace(/\D/g, "")}`,
+      label: branding.socialWhatsappLabel
+    }
+  ];
+
   return (
     <footer className="mt-auto border-t border-slate-200/80 bg-[linear-gradient(180deg,#fbf8ef_0%,#fffdf8_100%)] pt-16">
       <div className="shell py-12 sm:py-14">
@@ -29,9 +33,7 @@ export function SiteFooter() {
             <div className="space-y-4">
               <ZazzoLogo showTagline compact />
               <p className="max-w-md text-sm leading-7 text-slate-600 sm:text-[0.95rem]">
-                ZAZZO brings refined fashion, effortless shopping, and a modern
-                storefront experience designed to feel clean, fast, and premium
-                on every screen.
+                {branding.footerDescription}
               </p>
               <div className="flex flex-wrap items-center gap-3">
                 {socials.map((social) => (
@@ -87,10 +89,10 @@ export function SiteFooter() {
                 Contact
               </h3>
               <div className="space-y-3 text-sm leading-7 text-slate-600">
-                <p>Phone: +880 1700-000000</p>
-                <p>WhatsApp: +880 1700-000000</p>
-                <p>Facebook: zazzo.official</p>
-                <p>Support hours: 10:00 AM - 9:00 PM</p>
+                <p>Phone: {branding.phoneNumber}</p>
+                <p>WhatsApp: {branding.whatsappNumber}</p>
+                <p>Facebook: {branding.facebookHandle}</p>
+                <p>Support hours: {branding.supportHours}</p>
               </div>
             </div>
           </div>

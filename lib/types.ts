@@ -34,6 +34,24 @@ export type StoreSettings = {
   deliveryCharge: number;
 };
 
+export type StoreBranding = {
+  footerDescription: string;
+  widgetTitle: string;
+  whatsappLabel: string;
+  whatsappNumber: string;
+  phoneLabel: string;
+  phoneNumber: string;
+  facebookLabel: string;
+  facebookHandle: string;
+  facebookPageUrl: string;
+  supportHours: string;
+  socialFacebookLabel: string;
+  socialFacebookUrl: string;
+  socialInstagramLabel: string;
+  socialInstagramUrl: string;
+  socialWhatsappLabel: string;
+};
+
 export type CartItem = {
   productId: number;
   quantity: number;
@@ -81,6 +99,7 @@ export type StoreData = {
   heroDescription: string;
   homepageCollections: HomepageCollectionCard[];
   settings: StoreSettings;
+  branding: StoreBranding;
 };
 
 export type DashboardStat = {
