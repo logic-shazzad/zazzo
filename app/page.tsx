@@ -5,7 +5,7 @@ import { SectionTitle } from "@/components/section-title";
 import { SiteHeader } from "@/components/site-header";
 import { getStoreSnapshot } from "@/lib/store";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const snapshot = await getStoreSnapshot();

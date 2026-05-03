@@ -7,7 +7,7 @@ import { SiteHeader } from "@/components/site-header";
 import { formatCurrency } from "@/lib/currency";
 import { getStoreSnapshot } from "@/lib/store";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function ProductDetailsPage({
   params
