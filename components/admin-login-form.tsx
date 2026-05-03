@@ -7,8 +7,8 @@ import { ZazzoLogo } from "@/components/zazzo-logo";
 export function AdminLoginForm() {
   const router = useRouter();
   const [form, setForm] = useState({
-    email: "admin@zazzo.local",
-    password: "admin12345"
+    email: "",
+    password: ""
   });
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -48,14 +48,16 @@ export function AdminLoginForm() {
         Login to manage the store
       </h1>
       <p className="mt-4 text-sm leading-6 text-slate-600">
-        Default login is prefilled for local development. Change
-        `ADMIN_EMAIL` and `ADMIN_PASSWORD` later for real deployment.
+        Sign in with your configured admin credentials. For production, keep
+        `ADMIN_EMAIL` and `ADMIN_PASSWORD` set in your deployment environment.
       </p>
       <div className="mt-8 grid gap-5">
         <label className="grid gap-2 text-sm font-medium text-slate-700">
           Email
           <input
+            type="email"
             value={form.email}
+            placeholder="admin@yourstore.com"
             onChange={(event) =>
               setForm((current) => ({ ...current, email: event.target.value }))
             }
@@ -67,6 +69,7 @@ export function AdminLoginForm() {
           <input
             type="password"
             value={form.password}
+            placeholder="Enter admin password"
             onChange={(event) =>
               setForm((current) => ({ ...current, password: event.target.value }))
             }

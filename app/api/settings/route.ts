@@ -1,10 +1,15 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/api-response";
 import { getStoreSnapshot, updateStoreSettings } from "@/lib/store";
 
 export async function GET() {
-  const snapshot = await getStoreSnapshot();
-  return NextResponse.json(snapshot.settings);
+  try {
+    const snapshot = await getStoreSnapshot();
+    return NextResponse.json(snapshot.settings);
+  } catch (error) {
+    return jsonError(error, "Failed to load store settings.");
+  }
 }
 
 export async function PUT(request: Request) {
@@ -21,9 +26,6 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ settings });
   } catch (error) {
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : "Failed to update settings." },
-      { status: 400 }
-    );
+    return jsonError(error, "Failed to update settings.");
   }
 }

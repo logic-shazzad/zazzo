@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { formatCurrency } from "@/lib/currency";
 import { Product } from "@/lib/types";
 import { StatusBadge } from "@/components/status-badge";
@@ -24,6 +24,12 @@ export function AdminProductsManager({ initialProducts }: { initialProducts: Pro
   const [message, setMessage] = useState<string | null>(null);
   const [form, setForm] = useState(initialForm);
   const [uploading, setUploading] = useState(false);
+  const [uploadRequiresCloud, setUploadRequiresCloud] = useState(false);
+
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    setUploadRequiresCloud(hostname !== "localhost" && hostname !== "127.0.0.1");
+  }, []);
 
   function startEdit(product: Product) {
     setEditingId(product.id);
@@ -208,6 +214,12 @@ export function AdminProductsManager({ initialProducts }: { initialProducts: Pro
               Upload image files directly from your desktop. You can keep mixing
               uploaded files and URL-based images.
             </span>
+            {uploadRequiresCloud ? (
+              <span className="text-xs text-amber-700">
+                Deployed uploads require Cloudinary configuration. If upload is not
+                configured yet, use image URLs for now.
+              </span>
+            ) : null}
             <textarea
               required
               rows={6}

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/api-response";
 import { updateOrderStatus } from "@/lib/store";
 import { DeliveryStatus, PaymentStatus } from "@/lib/types";
 
@@ -15,9 +16,6 @@ export async function PATCH(
     const order = await updateOrderStatus(id, body);
     return NextResponse.json(order);
   } catch (error) {
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : "Failed to update order" },
-      { status: 400 }
-    );
+    return jsonError(error, "Failed to update order.");
   }
 }

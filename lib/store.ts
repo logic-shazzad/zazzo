@@ -28,6 +28,10 @@ const dataDirectory = process.env.DATA_DIR?.trim()
 
 const storeFile = path.join(dataDirectory, "store.json");
 const storeDocumentId = "main";
+const isProduction = process.env.NODE_ENV === "production";
+const isServerlessDeployment = Boolean(process.env.VERCEL);
+const storeUnavailableMessage =
+  "Store database is temporarily unavailable. Please verify your MongoDB connection and try again.";
 
 let writeQueue = Promise.resolve();
 let mongoClientPromise: Promise<MongoClient> | null = null;
@@ -63,6 +67,17 @@ const defaultHeroDescription =
 const defaultSettings: StoreSettings = {
   deliveryCharge: 120
 };
+
+export class StoreUnavailableError extends Error {
+  constructor(message = storeUnavailableMessage) {
+    super(message);
+    this.name = "StoreUnavailableError";
+  }
+}
+
+export function isStoreUnavailableError(error: unknown): error is StoreUnavailableError {
+  return error instanceof StoreUnavailableError;
+}
 
 function cloneStore(data: StoreData): StoreData {
   return JSON.parse(JSON.stringify(data)) as StoreData;
@@ -102,11 +117,31 @@ async function getMongoClient() {
   }
 
   if (!mongoClientPromise) {
-    const client = new MongoClient(mongoUri);
+    const client = new MongoClient(mongoUri, {
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+      maxPoolSize: 10
+    });
     mongoClientPromise = client.connect();
   }
 
   return mongoClientPromise;
+}
+
+function fallbackStoreData() {
+  return normalizeStore(seedData as StoreData & {
+    products: Array<Product & { image?: string; images?: string[] }>;
+    heroDescription?: string;
+  });
+}
+
+function toStoreUnavailableError(error: unknown) {
+  if (error instanceof StoreUnavailableError) {
+    return error;
+  }
+
+  console.error("Store persistence error:", error);
+  return new StoreUnavailableError();
 }
 
 async function getMongoCollection() {
@@ -152,21 +187,30 @@ async function ensureMongoStore() {
 
 export async function readStore(): Promise<StoreData> {
   if (mongoUri) {
-    await ensureMongoStore();
-    const collection = await getMongoCollection();
-    const document = await collection.findOne({
-      _id: storeDocumentId
-    });
+    try {
+      await ensureMongoStore();
+      const collection = await getMongoCollection();
+      const document = await collection.findOne({
+        _id: storeDocumentId
+      });
 
-    if (!document) {
-      throw new Error("MongoDB store document not found.");
+      if (!document) {
+        throw new Error("MongoDB store document not found.");
+      }
+
+      const { _id, ...store } = document;
+      return normalizeStore(store as StoreData & {
+        products: Array<Product & { image?: string; images?: string[] }>;
+        heroDescription?: string;
+      });
+    } catch (error) {
+      if (isProduction || isServerlessDeployment) {
+        console.error("MongoDB read failed. Falling back to seed data.", error);
+        return fallbackStoreData();
+      }
+
+      throw toStoreUnavailableError(error);
     }
-
-    const { _id, ...store } = document;
-    return normalizeStore(store as StoreData & {
-      products: Array<Product & { image?: string; images?: string[] }>;
-      heroDescription?: string;
-    });
   }
 
   await ensureStoreFile();
@@ -181,13 +225,17 @@ export async function readStore(): Promise<StoreData> {
 
 async function writeStore(data: StoreData) {
   if (mongoUri) {
-    await ensureMongoStore();
-    const collection = await getMongoCollection();
-    await collection.replaceOne(
-      { _id: storeDocumentId },
-      { _id: storeDocumentId, ...data } as MongoStoreRecord,
-      { upsert: true }
-    );
+    try {
+      await ensureMongoStore();
+      const collection = await getMongoCollection();
+      await collection.replaceOne(
+        { _id: storeDocumentId },
+        { _id: storeDocumentId, ...data } as MongoStoreRecord,
+        { upsert: true }
+      );
+    } catch (error) {
+      throw toStoreUnavailableError(error);
+    }
     return;
   }
 

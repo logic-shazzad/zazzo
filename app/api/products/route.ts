@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/api-response";
 import { createProduct, getStoreSnapshot } from "@/lib/store";
 import { ProductInput } from "@/lib/types";
 
@@ -47,8 +48,12 @@ function validateProductInput(input: ProductInput) {
 }
 
 export async function GET() {
-  const snapshot = await getStoreSnapshot();
-  return NextResponse.json(snapshot.products);
+  try {
+    const snapshot = await getStoreSnapshot();
+    return NextResponse.json(snapshot.products);
+  } catch (error) {
+    return jsonError(error, "Failed to load products.");
+  }
 }
 
 export async function POST(request: Request) {
@@ -62,9 +67,6 @@ export async function POST(request: Request) {
     revalidatePath(`/products/${product.slug}`);
     return NextResponse.json(product, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : "Failed to create product" },
-      { status: 400 }
-    );
+    return jsonError(error, "Failed to create product.");
   }
 }

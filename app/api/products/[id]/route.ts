@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/api-response";
 import { deleteProduct, updateProduct } from "@/lib/store";
 import { ProductInput } from "@/lib/types";
 
@@ -45,10 +46,7 @@ export async function PUT(
     revalidatePath(`/products/${product.slug}`);
     return NextResponse.json(product);
   } catch (error) {
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : "Failed to update product" },
-      { status: 400 }
-    );
+    return jsonError(error, "Failed to update product.");
   }
 }
 
@@ -63,9 +61,6 @@ export async function DELETE(
     revalidatePath("/products");
     return NextResponse.json(result);
   } catch (error) {
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : "Failed to delete product" },
-      { status: 400 }
-    );
+    return jsonError(error, "Failed to delete product.");
   }
 }

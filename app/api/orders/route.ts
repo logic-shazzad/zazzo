@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/api-response";
 import { createOrder, getStoreSnapshot } from "@/lib/store";
 import { CartItem, CreateOrderInput } from "@/lib/types";
 
 export async function GET() {
-  const snapshot = await getStoreSnapshot();
-  return NextResponse.json(snapshot.orders);
+  try {
+    const snapshot = await getStoreSnapshot();
+    return NextResponse.json(snapshot.orders);
+  } catch (error) {
+    return jsonError(error, "Failed to load orders.");
+  }
 }
 
 export async function POST(request: Request) {
@@ -26,9 +31,6 @@ export async function POST(request: Request) {
     const order = await createOrder(input);
     return NextResponse.json(order, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { message: error instanceof Error ? error.message : "Failed to place order" },
-      { status: 400 }
-    );
+    return jsonError(error, "Failed to place order.");
   }
 }

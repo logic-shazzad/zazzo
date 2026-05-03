@@ -1,14 +1,19 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/api-response";
 import { HomepageCollectionCard } from "@/lib/types";
 import { getStoreSnapshot, updateHomepageCollections } from "@/lib/store";
 
 export async function GET() {
-  const snapshot = await getStoreSnapshot();
-  return NextResponse.json({
-    cards: snapshot.homepageCollections,
-    heroDescription: snapshot.heroDescription
-  });
+  try {
+    const snapshot = await getStoreSnapshot();
+    return NextResponse.json({
+      cards: snapshot.homepageCollections,
+      heroDescription: snapshot.heroDescription
+    });
+  } catch (error) {
+    return jsonError(error, "Failed to load homepage content.");
+  }
 }
 
 export async function PUT(request: Request) {
@@ -26,12 +31,6 @@ export async function PUT(request: Request) {
     revalidatePath("/admin/homepage");
     return NextResponse.json(updatedHomepageContent);
   } catch (error) {
-    return NextResponse.json(
-      {
-        message:
-          error instanceof Error ? error.message : "Failed to update homepage collections."
-      },
-      { status: 400 }
-    );
+    return jsonError(error, "Failed to update homepage collections.");
   }
 }
