@@ -1,0 +1,430 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "AeroFit Runner",
+      "slug": "aerofit-runner",
+      "category": "Sneakers",
+      "description": "Lightweight daily sneakers with breathable mesh, cloud-soft support, and a striking urban profile.",
+      "price": 89,
+      "inventory": 20,
+      "rating": 4.8,
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
+      "accent": "from-orange-300 via-orange-200 to-white",
+      "featured": true,
+      "sku": "SNK-001",
+      "images": [
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Canvas Utility Pack",
+      "slug": "canvas-utility-pack",
+      "category": "Bags",
+      "description": "Structured daypack with waterproof finish, laptop sleeve, and travel-ready interior pockets.",
+      "price": 74,
+      "inventory": 5,
+      "rating": 4.6,
+      "image": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1200&q=80",
+      "accent": "from-emerald-200 via-teal-100 to-white",
+      "featured": true,
+      "sku": "BAG-101",
+      "images": [
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1200&q=80"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Luma Studio Lamp",
+      "slug": "luma-studio-lamp",
+      "category": "Home Decor",
+      "description": "Minimal desk lamp with warm ambient glow, touch controls, and a sculpted matte finish.",
+      "price": 10808,
+      "inventory": 5,
+      "rating": 4.9,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj816WRW0Ay-8SDdOIfSCOCMViPFQxxw8eJg&s",
+      "accent": "from-sky-200 via-cyan-100 to-white",
+      "featured": false,
+      "sku": "HOM-901",
+      "images": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj816WRW0Ay-8SDdOIfSCOCMViPFQxxw8eJg&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj816WRW0Ay-8SDdOIfSCOCMViPFQxxw8eJg&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj816WRW0Ay-8SDdOIfSCOCMViPFQxxw8eJg&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnNA7nigRov2J2T0FAk4CrOJ554bR9CuPL2w&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnNA7nigRov2J2T0FAk4CrOJ554bR9CuPL2w&s"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Terra Ceramic Set",
+      "slug": "terra-ceramic-set",
+      "category": "Dining",
+      "description": "Hand-finished tableware set designed for cozy hosting, with earthy tones and durable glaze.",
+      "price": 96,
+      "inventory": 16,
+      "rating": 4.7,
+      "image": "https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=1200&q=80",
+      "accent": "from-amber-200 via-stone-100 to-white",
+      "featured": true,
+      "sku": "DIN-220",
+      "images": [
+        "https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=1200&q=80",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnNA7nigRov2J2T0FAk4CrOJ554bR9CuPL2w&s"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Nord Fold Chair",
+      "slug": "nord-fold-chair",
+      "category": "Furniture",
+      "description": "Compact accent chair with oak frame, woven seat, and a premium lounge look for modern interiors.",
+      "price": 159,
+      "inventory": 6,
+      "rating": 4.5,
+      "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+      "accent": "from-stone-200 via-neutral-100 to-white",
+      "featured": false,
+      "sku": "FUR-440",
+      "images": [
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Pulse Smart Bottle",
+      "slug": "pulse-smart-bottle",
+      "category": "Lifestyle",
+      "description": "Insulated hydration bottle with temperature display, leakproof cap, and clean brushed finish.",
+      "price": 49,
+      "inventory": 29,
+      "rating": 4.4,
+      "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=1200&q=80",
+      "accent": "from-lime-200 via-emerald-100 to-white",
+      "featured": true,
+      "sku": "LIF-330",
+      "images": [
+        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=1200&q=80"
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "id": "CUS-1005",
+      "name": "Test2",
+      "email": "test@",
+      "phone": "01000202",
+      "address": "dacca,tangail",
+      "totalOrders": 3,
+      "totalSpent": 831,
+      "createdAt": "2026-04-24T17:25:42.927Z"
+    },
+    {
+      "id": "CUS-1004",
+      "name": "MD SHAZZAD HOSSAIN",
+      "email": "shazzad7007@gmail.com",
+      "phone": "00000000",
+      "address": "Dhaka",
+      "totalOrders": 2,
+      "totalSpent": 32978,
+      "createdAt": "2026-04-23T16:15:04.579Z"
+    },
+    {
+      "id": "CUS-1001",
+      "name": "Nafisa Rahman",
+      "email": "nafisa@example.com",
+      "phone": "+8801700000001",
+      "address": "Dhanmondi, Dhaka",
+      "totalOrders": 2,
+      "totalSpent": 326,
+      "createdAt": "2026-04-18T09:30:00.000Z"
+    },
+    {
+      "id": "CUS-1002",
+      "name": "Arif Hasan",
+      "email": "arif@example.com",
+      "phone": "+8801700000002",
+      "address": "Chattogram, Bangladesh",
+      "totalOrders": 1,
+      "totalSpent": 89,
+      "createdAt": "2026-04-20T11:15:00.000Z"
+    },
+    {
+      "id": "CUS-1003",
+      "name": "Mim Sultana",
+      "email": "mim@example.com",
+      "phone": "+8801700000003",
+      "address": "Uttara, Dhaka",
+      "totalOrders": 3,
+      "totalSpent": 452,
+      "createdAt": "2026-04-22T14:00:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "NC-1031",
+      "customerId": "CUS-1004",
+      "customer": "MD SHAZZAD HOSSAIN",
+      "email": "shazzad7007@gmail.com",
+      "phone": "00000000",
+      "address": "Dhaka",
+      "items": [
+        {
+          "productId": 1,
+          "name": "AeroFit Runner",
+          "price": 89,
+          "quantity": 1
+        },
+        {
+          "productId": 2,
+          "name": "Canvas Utility Pack",
+          "price": 74,
+          "quantity": 1
+        },
+        {
+          "productId": 3,
+          "name": "Luma Studio Lamp",
+          "price": 10808,
+          "quantity": 3
+        },
+        {
+          "productId": 6,
+          "name": "Pulse Smart Bottle",
+          "price": 49,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 32636,
+      "shipping": 120,
+      "total": 32756,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Pending",
+      "deliveryStatus": "Cancelled",
+      "createdAt": "2026-04-24T18:25:44.971Z"
+    },
+    {
+      "id": "NC-1030",
+      "customerId": "CUS-1005",
+      "customer": "Test2",
+      "email": "test@",
+      "phone": "01000202",
+      "address": "dacca,tangail",
+      "items": [
+        {
+          "productId": 4,
+          "name": "Terra Ceramic Set",
+          "price": 96,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 96,
+      "shipping": 120,
+      "total": 216,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Pending",
+      "deliveryStatus": "Processing",
+      "createdAt": "2026-04-24T17:42:32.466Z"
+    },
+    {
+      "id": "NC-1029",
+      "customerId": "CUS-1005",
+      "customer": "Test",
+      "email": "test@",
+      "phone": "0000",
+      "address": "dhaka, tangail",
+      "items": [
+        {
+          "productId": 1,
+          "name": "AeroFit Runner",
+          "price": 89,
+          "quantity": 1
+        },
+        {
+          "productId": 2,
+          "name": "Canvas Utility Pack",
+          "price": 74,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 163,
+      "shipping": 120,
+      "total": 283,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Pending",
+      "deliveryStatus": "Processing",
+      "createdAt": "2026-04-24T17:37:47.144Z"
+    },
+    {
+      "id": "NC-1028",
+      "customerId": "CUS-1005",
+      "customer": "test",
+      "email": "test@",
+      "phone": "00000",
+      "address": "dcca,lowhati , delduar",
+      "items": [
+        {
+          "productId": 6,
+          "name": "Pulse Smart Bottle",
+          "price": 49,
+          "quantity": 1
+        },
+        {
+          "productId": 2,
+          "name": "Canvas Utility Pack",
+          "price": 74,
+          "quantity": 1
+        },
+        {
+          "productId": 1,
+          "name": "AeroFit Runner",
+          "price": 89,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 212,
+      "shipping": 120,
+      "total": 332,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Pending",
+      "deliveryStatus": "Processing",
+      "createdAt": "2026-04-24T17:25:42.929Z"
+    },
+    {
+      "id": "NC-1027",
+      "customerId": "CUS-1004",
+      "customer": "test",
+      "email": "shazzad7007@gmail.com",
+      "phone": "0000000",
+      "address": "Dhaka",
+      "items": [
+        {
+          "productId": 2,
+          "name": "Canvas Utility Pack",
+          "price": 74,
+          "quantity": 3
+        }
+      ],
+      "subtotal": 222,
+      "shipping": 0,
+      "total": 222,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Paid",
+      "deliveryStatus": "Shipped",
+      "createdAt": "2026-04-23T16:15:04.580Z"
+    },
+    {
+      "id": "NC-1024",
+      "customerId": "CUS-1001",
+      "customer": "Nafisa Rahman",
+      "email": "nafisa@example.com",
+      "phone": "+8801700000001",
+      "address": "Dhanmondi, Dhaka",
+      "items": [
+        {
+          "productId": 1,
+          "name": "AeroFit Runner",
+          "price": 89,
+          "quantity": 1
+        },
+        {
+          "productId": 2,
+          "name": "Canvas Utility Pack",
+          "price": 74,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 163,
+      "shipping": 0,
+      "total": 163,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Paid",
+      "deliveryStatus": "Delivered",
+      "createdAt": "2026-04-20T13:10:00.000Z"
+    },
+    {
+      "id": "NC-1025",
+      "customerId": "CUS-1002",
+      "customer": "Arif Hasan",
+      "email": "arif@example.com",
+      "phone": "+8801700000002",
+      "address": "Chattogram, Bangladesh",
+      "items": [
+        {
+          "productId": 1,
+          "name": "AeroFit Runner",
+          "price": 89,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 89,
+      "shipping": 0,
+      "total": 89,
+      "paymentMethod": "bKash",
+      "paymentStatus": "Pending",
+      "deliveryStatus": "Processing",
+      "createdAt": "2026-04-21T10:30:00.000Z"
+    },
+    {
+      "id": "NC-1026",
+      "customerId": "CUS-1003",
+      "customer": "Mim Sultana",
+      "email": "mim@example.com",
+      "phone": "+8801700000003",
+      "address": "Uttara, Dhaka",
+      "items": [
+        {
+          "productId": 4,
+          "name": "Terra Ceramic Set",
+          "price": 96,
+          "quantity": 1
+        },
+        {
+          "productId": 3,
+          "name": "Luma Studio Lamp",
+          "price": 119,
+          "quantity": 1
+        }
+      ],
+      "subtotal": 215,
+      "shipping": 0,
+      "total": 215,
+      "paymentMethod": "Card",
+      "paymentStatus": "Paid",
+      "deliveryStatus": "Packed",
+      "createdAt": "2026-04-22T12:45:00.000Z"
+    }
+  ],
+  "homepageCollections": [
+    {
+      "id": "collection-1",
+      "eyebrow": "Collection",
+      "title": "Sneakers",
+      "description": "Everyday pairs selected for comfort, movement, and a sharper street-ready finish."
+    },
+    {
+      "id": "collection-2",
+      "eyebrow": "Collection",
+      "title": "Bags",
+      "description": "Functional carry pieces with clean structure, easy styling, and all-day practicality."
+    },
+    {
+      "id": "collection-3",
+      "eyebrow": "Collection",
+      "title": "Home Decor",
+      "description": "Refined home accents that add warmth, balance, and a premium modern touch."
+    }
+  ],
+  "settings": {
+    "deliveryCharge": 120
+  },
+  "heroDescription": "Discover trend-forward shirts, pants, sarees, and everyday fashion essentials with a storefront designed to feel modern, fast, and easy to shop."
+}

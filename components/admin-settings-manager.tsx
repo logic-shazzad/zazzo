@@ -1,0 +1,87 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import { formatCurrency } from "@/lib/currency";
+import { StoreSettings } from "@/lib/types";
+
+export function AdminSettingsManager({
+  initialSettings
+}: {
+  initialSettings: StoreSettings;
+}) {
+  const [deliveryCharge, setDeliveryCharge] = useState(
+    String(initialSettings.deliveryCharge)
+  );
+  const [message, setMessage] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving(true);
+    setMessage(null);
+
+    const response = await fetch("/api/settings", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        deliveryCharge: Number(deliveryCharge)
+      })
+    });
+
+    const data = (await response.json()) as {
+      settings?: StoreSettings;
+      message?: string;
+    };
+
+    if (!response.ok || !data.settings) {
+      setMessage(data.message ?? "Unable to update settings.");
+      setSaving(false);
+      return;
+    }
+
+    setDeliveryCharge(String(data.settings.deliveryCharge));
+    setSaving(false);
+    setMessage("Delivery charge updated successfully.");
+  }
+
+  return (
+    <div className="panel p-6">
+      <p className="text-sm font-semibold uppercase tracking-[0.28em] text-coral">
+        Store Settings
+      </p>
+      <h2 className="mt-2 text-2xl font-semibold text-ink">
+        Control delivery charge from the admin panel
+      </h2>
+      <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">
+        This amount is added once to each customer order during checkout and cart
+        summary. Current delivery charge: {formatCurrency(Number(deliveryCharge) || 0)}.
+      </p>
+
+      <form onSubmit={handleSubmit} className="mt-8 max-w-xl grid gap-4">
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+          Delivery Charge (TK)
+          <input
+            type="number"
+            min="0"
+            value={deliveryCharge}
+            onChange={(event) => setDeliveryCharge(event.target.value)}
+            className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
+          />
+        </label>
+
+        <div className="flex items-center gap-4">
+          <button
+            type="submit"
+            disabled={saving}
+            className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {saving ? "Saving..." : "Update Settings"}
+          </button>
+          {message ? <p className="text-sm text-pine">{message}</p> : null}
+        </div>
+      </form>
+    </div>
+  );
+}

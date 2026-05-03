@@ -1,0 +1,12 @@
+.next
+node_modules
+dist
+coverage
+*.log
+.git_alt
+.git_push_repo
+.vercel
+.env
+.env.local
+.env.production
+.env.development
