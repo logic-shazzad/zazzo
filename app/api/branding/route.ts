@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { jsonError } from "@/lib/api-response";
 import { getStoreSnapshot, updateStoreBranding } from "@/lib/store";
 import { StoreBranding } from "@/lib/types";
@@ -32,6 +33,11 @@ export async function PUT(request: Request) {
       socialInstagramUrl: String(body.socialInstagramUrl ?? ""),
       socialWhatsappLabel: String(body.socialWhatsappLabel ?? "")
     });
+
+    revalidatePath("/", "layout");
+    revalidatePath("/products");
+    revalidatePath("/checkout");
+    revalidatePath("/cart");
 
     return NextResponse.json({ branding });
   } catch (error) {
