@@ -39,7 +39,12 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         <div className="flex items-center justify-between gap-3">
           <span className="text-xl font-semibold text-pine sm:text-2xl">{formatCurrency(product.price)}</span>
-          <AddToCartButton productId={product.id} compact />
+          <AddToCartButton
+            productId={product.id}
+            compact
+            requiresSize={product.availableSizes.length > 0}
+            redirectHref={`/products/${product.slug}`}
+          />
         </div>
       </div>
     </article>

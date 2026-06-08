@@ -8,6 +8,8 @@ export type DeliveryStatus =
   | "Delivered"
   | "Cancelled";
 
+export type DeliveryZone = "inside_dhaka" | "outside_dhaka";
+
 export type Product = {
   id: number;
   name: string;
@@ -21,6 +23,7 @@ export type Product = {
   accent: string;
   featured: boolean;
   sku: string;
+  availableSizes: string[];
 };
 
 export type HomepageCollectionCard = {
@@ -31,7 +34,8 @@ export type HomepageCollectionCard = {
 };
 
 export type StoreSettings = {
-  deliveryCharge: number;
+  insideDhakaDeliveryCharge: number;
+  outsideDhakaDeliveryCharge: number;
 };
 
 export type StoreBranding = {
@@ -62,6 +66,7 @@ export type ModeratorUser = {
 export type CartItem = {
   productId: number;
   quantity: number;
+  size?: string;
 };
 
 export type Customer = {
@@ -80,6 +85,7 @@ export type OrderItem = {
   name: string;
   price: number;
   quantity: number;
+  size?: string;
 };
 
 export type Order = {
@@ -89,6 +95,7 @@ export type Order = {
   email: string;
   phone: string;
   address: string;
+  deliveryZone: DeliveryZone;
   items: OrderItem[];
   subtotal: number;
   shipping: number;
@@ -129,6 +136,7 @@ export type CreateOrderInput = {
   phone: string;
   address: string;
   paymentMethod: string;
+  deliveryZone: DeliveryZone;
   items: CartItem[];
 };
 
@@ -143,4 +151,5 @@ export type ProductInput = {
   accent: string;
   featured: boolean;
   sku: string;
+  availableSizes: string[];
 };

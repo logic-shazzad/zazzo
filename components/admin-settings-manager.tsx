@@ -9,8 +9,11 @@ export function AdminSettingsManager({
 }: {
   initialSettings: StoreSettings;
 }) {
-  const [deliveryCharge, setDeliveryCharge] = useState(
-    String(initialSettings.deliveryCharge)
+  const [insideDhakaDeliveryCharge, setInsideDhakaDeliveryCharge] = useState(
+    String(initialSettings.insideDhakaDeliveryCharge)
+  );
+  const [outsideDhakaDeliveryCharge, setOutsideDhakaDeliveryCharge] = useState(
+    String(initialSettings.outsideDhakaDeliveryCharge)
   );
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -26,7 +29,8 @@ export function AdminSettingsManager({
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        deliveryCharge: Number(deliveryCharge)
+        insideDhakaDeliveryCharge: Number(insideDhakaDeliveryCharge),
+        outsideDhakaDeliveryCharge: Number(outsideDhakaDeliveryCharge)
       })
     });
 
@@ -41,7 +45,8 @@ export function AdminSettingsManager({
       return;
     }
 
-    setDeliveryCharge(String(data.settings.deliveryCharge));
+    setInsideDhakaDeliveryCharge(String(data.settings.insideDhakaDeliveryCharge));
+    setOutsideDhakaDeliveryCharge(String(data.settings.outsideDhakaDeliveryCharge));
     setSaving(false);
     setMessage("Delivery charge updated successfully.");
   }
@@ -52,21 +57,34 @@ export function AdminSettingsManager({
         Store Settings
       </p>
       <h2 className="mt-2 text-2xl font-semibold text-ink">
-        Control delivery charge from the admin panel
+        Control Dhaka delivery charge from the admin panel
       </h2>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">
-        This amount is added once to each customer order during checkout and cart
-        summary. Current delivery charge: {formatCurrency(Number(deliveryCharge) || 0)}.
+        Customers can choose whether they are inside Dhaka City Corporation or
+        outside it during checkout. Inside charge:{" "}
+        {formatCurrency(Number(insideDhakaDeliveryCharge) || 0)}. Outside charge:{" "}
+        {formatCurrency(Number(outsideDhakaDeliveryCharge) || 0)}.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 max-w-xl grid gap-4">
         <label className="grid gap-2 text-sm font-medium text-slate-700">
-          Delivery Charge (TK)
+          Inside Dhaka City Corporation Delivery Charge (TK)
           <input
             type="number"
             min="0"
-            value={deliveryCharge}
-            onChange={(event) => setDeliveryCharge(event.target.value)}
+            value={insideDhakaDeliveryCharge}
+            onChange={(event) => setInsideDhakaDeliveryCharge(event.target.value)}
+            className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
+          />
+        </label>
+
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+          Outside Dhaka City Corporation Delivery Charge (TK)
+          <input
+            type="number"
+            min="0"
+            value={outsideDhakaDeliveryCharge}
+            onChange={(event) => setOutsideDhakaDeliveryCharge(event.target.value)}
             className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
           />
         </label>

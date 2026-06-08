@@ -14,9 +14,13 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const body = (await request.json()) as { deliveryCharge?: number };
+    const body = (await request.json()) as {
+      insideDhakaDeliveryCharge?: number;
+      outsideDhakaDeliveryCharge?: number;
+    };
     const settings = await updateStoreSettings({
-      deliveryCharge: Number(body.deliveryCharge ?? 0)
+      insideDhakaDeliveryCharge: Number(body.insideDhakaDeliveryCharge ?? 0),
+      outsideDhakaDeliveryCharge: Number(body.outsideDhakaDeliveryCharge ?? 0)
     });
 
     revalidatePath("/");

@@ -11,9 +11,9 @@ import { CartItem } from "@/lib/types";
 type CartContextValue = {
   items: CartItem[];
   count: number;
-  addItem: (productId: number, quantity?: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
-  removeItem: (productId: number) => void;
+  addItem: (productId: number, quantity?: number, size?: string) => void;
+  updateQuantity: (productId: number, quantity: number, size?: string) => void;
+  removeItem: (productId: number, size?: string) => void;
   clearCart: () => void;
 };
 
@@ -37,34 +37,49 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const value: CartContextValue = {
     items,
     count: items.reduce((sum, item) => sum + item.quantity, 0),
-    addItem: (productId, quantity = 1) => {
+    addItem: (productId, quantity = 1, size) => {
       setItems((current) => {
-        const existing = current.find((item) => item.productId === productId);
+        const normalizedSize = size?.trim() || undefined;
+        const existing = current.find(
+          (item) => item.productId === productId && item.size === normalizedSize
+        );
         if (!existing) {
-          return [...current, { productId, quantity }];
+          return [...current, { productId, quantity, size: normalizedSize }];
         }
 
         return current.map((item) =>
-          item.productId === productId
+          item.productId === productId && item.size === normalizedSize
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       });
     },
-    updateQuantity: (productId, quantity) => {
+    updateQuantity: (productId, quantity, size) => {
+      const normalizedSize = size?.trim() || undefined;
       if (quantity <= 0) {
-        setItems((current) => current.filter((item) => item.productId !== productId));
+        setItems((current) =>
+          current.filter(
+            (item) => !(item.productId === productId && item.size === normalizedSize)
+          )
+        );
         return;
       }
 
       setItems((current) =>
         current.map((item) =>
-          item.productId === productId ? { ...item, quantity } : item
+          item.productId === productId && item.size === normalizedSize
+            ? { ...item, quantity }
+            : item
         )
       );
     },
-    removeItem: (productId) => {
-      setItems((current) => current.filter((item) => item.productId !== productId));
+    removeItem: (productId, size) => {
+      const normalizedSize = size?.trim() || undefined;
+      setItems((current) =>
+        current.filter(
+          (item) => !(item.productId === productId && item.size === normalizedSize)
+        )
+      );
     },
     clearCart: () => setItems([])
   };

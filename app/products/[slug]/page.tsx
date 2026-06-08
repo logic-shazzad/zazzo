@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AddToCartButton } from "@/components/add-to-cart-button";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
+import { ProductPurchasePanel } from "@/components/product-purchase-panel";
 import { SiteHeader } from "@/components/site-header";
 import { formatCurrency } from "@/lib/currency";
 import { getStoreSnapshot } from "@/lib/store";
@@ -70,15 +69,7 @@ export default async function ProductDetailsPage({
                 <p className="mt-2 text-xl font-semibold text-ink">{product.sku}</p>
               </div>
             </div>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <AddToCartButton productId={product.id} />
-              <Link
-                href="/checkout"
-                className="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700"
-              >
-                Go to checkout
-              </Link>
-            </div>
+            <ProductPurchasePanel product={product} />
             <p className="mt-6 text-sm leading-6 text-slate-500">
               This product currently has {product.images.length} gallery images for
               customers to review before purchase.

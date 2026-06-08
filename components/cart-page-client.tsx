@@ -18,15 +18,17 @@ export function CartPageClient({
   const rows = items
     .map((item) => {
       const product = products.find((entry) => entry.id === item.productId);
-      return product ? { product, quantity: item.quantity } : null;
+      return product ? { product, quantity: item.quantity, size: item.size } : null;
     })
-    .filter(Boolean) as { product: Product; quantity: number }[];
+    .filter(Boolean) as { product: Product; quantity: number; size?: string }[];
 
   const subtotal = rows.reduce(
     (sum, row) => sum + row.product.price * row.quantity,
     0
   );
-  const shipping = subtotal === 0 ? 0 : settings.deliveryCharge;
+  const insideDhakaShipping = subtotal === 0 ? 0 : settings.insideDhakaDeliveryCharge;
+  const outsideDhakaShipping = subtotal === 0 ? 0 : settings.outsideDhakaDeliveryCharge;
+  const shipping = insideDhakaShipping;
   const total = subtotal + shipping;
 
   return (
@@ -50,9 +52,9 @@ export function CartPageClient({
             </div>
           ) : (
             <div className="mt-8 space-y-4">
-              {rows.map(({ product, quantity }) => (
+              {rows.map(({ product, quantity, size }) => (
                 <div
-                  key={product.id}
+                  key={`${product.id}-${size ?? "default"}`}
                   className="grid gap-4 rounded-[28px] border border-slate-200 p-4 sm:grid-cols-[120px_1fr_auto]"
                 >
                   <div className="relative h-28 overflow-hidden rounded-2xl bg-slate-100">
@@ -67,6 +69,7 @@ export function CartPageClient({
                   <div>
                     <h2 className="text-xl font-semibold text-ink">{product.name}</h2>
                     <p className="mt-2 text-sm text-slate-600">{product.category}</p>
+                    {size ? <p className="mt-1 text-sm text-slate-500">Size: {size}</p> : null}
                     <p className="mt-2 text-lg font-semibold text-pine">
                       {formatCurrency(product.price)}
                     </p>
@@ -75,7 +78,7 @@ export function CartPageClient({
                     <div className="flex items-center gap-3 rounded-full border border-slate-200 px-3 py-2">
                       <button
                         type="button"
-                        onClick={() => updateQuantity(product.id, quantity - 1)}
+                        onClick={() => updateQuantity(product.id, quantity - 1, size)}
                         className="text-lg text-slate-500"
                       >
                         -
@@ -83,7 +86,7 @@ export function CartPageClient({
                       <span className="w-6 text-center text-sm font-semibold">{quantity}</span>
                       <button
                         type="button"
-                        onClick={() => updateQuantity(product.id, quantity + 1)}
+                        onClick={() => updateQuantity(product.id, quantity + 1, size)}
                         className="text-lg text-slate-500"
                       >
                         +
@@ -91,7 +94,7 @@ export function CartPageClient({
                     </div>
                     <button
                       type="button"
-                      onClick={() => removeItem(product.id)}
+                      onClick={() => removeItem(product.id, size)}
                       className="text-sm font-medium text-coral"
                     >
                       Remove
@@ -111,7 +114,7 @@ export function CartPageClient({
               <span className="font-semibold text-ink">{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span>Shipping</span>
+              <span>Shipping from</span>
               <span className="font-semibold text-ink">{formatCurrency(shipping)}</span>
             </div>
           </div>
@@ -122,7 +125,14 @@ export function CartPageClient({
             </div>
             <div className="mt-5 space-y-3 text-sm leading-6 text-slate-500">
               <p>Cart page is for reviewing items only. Payment and shipping details are completed in the checkout step.</p>
-              <p>Current delivery charge for this order is {formatCurrency(shipping)}.</p>
+              <p>
+                Inside Dhaka City Corporation delivery charge:{" "}
+                {formatCurrency(insideDhakaShipping)}.
+              </p>
+              <p>
+                Outside Dhaka City Corporation delivery charge:{" "}
+                {formatCurrency(outsideDhakaShipping)}.
+              </p>
             </div>
             <div className="mt-6 flex flex-col gap-3">
               <Link

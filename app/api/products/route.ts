@@ -12,6 +12,11 @@ function normalizeProductInput(body: Record<string, unknown>): ProductInput {
       : typeof body.image === "string"
         ? [body.image]
         : [];
+  const sizes = Array.isArray(body.availableSizes)
+    ? body.availableSizes
+    : typeof body.availableSizes === "string"
+      ? body.availableSizes.split(/[\n,]+/)
+      : [];
 
   return {
     name: String(body.name ?? "").trim(),
@@ -23,7 +28,8 @@ function normalizeProductInput(body: Record<string, unknown>): ProductInput {
     images: images.map((image) => String(image).trim()).filter(Boolean),
     accent: String(body.accent ?? "from-slate-200 via-white to-white").trim(),
     featured: Boolean(body.featured),
-    sku: String(body.sku ?? "").trim()
+    sku: String(body.sku ?? "").trim(),
+    availableSizes: sizes.map((size) => String(size).trim().toUpperCase()).filter(Boolean)
   };
 }
 

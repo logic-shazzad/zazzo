@@ -38,7 +38,8 @@ export const seedData: StoreData = {
       ],
       accent: "from-orange-300 via-orange-200 to-white",
       featured: true,
-      sku: "SNK-001"
+      sku: "SNK-001",
+      availableSizes: ["39", "40", "41", "42", "43"]
     },
     {
       id: 2,
@@ -57,7 +58,8 @@ export const seedData: StoreData = {
       ],
       accent: "from-emerald-200 via-teal-100 to-white",
       featured: true,
-      sku: "BAG-101"
+      sku: "BAG-101",
+      availableSizes: []
     },
     {
       id: 3,
@@ -76,7 +78,8 @@ export const seedData: StoreData = {
       ],
       accent: "from-sky-200 via-cyan-100 to-white",
       featured: false,
-      sku: "HOM-901"
+      sku: "HOM-901",
+      availableSizes: []
     },
     {
       id: 4,
@@ -95,7 +98,8 @@ export const seedData: StoreData = {
       ],
       accent: "from-amber-200 via-stone-100 to-white",
       featured: true,
-      sku: "DIN-220"
+      sku: "DIN-220",
+      availableSizes: []
     },
     {
       id: 5,
@@ -114,7 +118,8 @@ export const seedData: StoreData = {
       ],
       accent: "from-stone-200 via-neutral-100 to-white",
       featured: false,
-      sku: "FUR-440"
+      sku: "FUR-440",
+      availableSizes: []
     },
     {
       id: 6,
@@ -133,7 +138,8 @@ export const seedData: StoreData = {
       ],
       accent: "from-lime-200 via-emerald-100 to-white",
       featured: true,
-      sku: "LIF-330"
+      sku: "LIF-330",
+      availableSizes: []
     }
   ],
   homepageCollections: [
@@ -162,7 +168,8 @@ export const seedData: StoreData = {
   heroDescription:
     "Discover trend-forward shirts, pants, sarees, and everyday fashion essentials with a storefront designed to feel modern, fast, and easy to shop.",
   settings: {
-    deliveryCharge: 120
+    insideDhakaDeliveryCharge: 120,
+    outsideDhakaDeliveryCharge: 120
   },
   branding: defaultBranding,
   moderators: [],
@@ -206,6 +213,7 @@ export const seedData: StoreData = {
       email: "nafisa@example.com",
       phone: "+8801700000001",
       address: "Dhanmondi, Dhaka",
+      deliveryZone: "inside_dhaka",
       items: [
         {
           productId: 1,
@@ -235,6 +243,7 @@ export const seedData: StoreData = {
       email: "arif@example.com",
       phone: "+8801700000002",
       address: "Chattogram, Bangladesh",
+      deliveryZone: "outside_dhaka",
       items: [
         {
           productId: 1,
@@ -258,6 +267,7 @@ export const seedData: StoreData = {
       email: "mim@example.com",
       phone: "+8801700000003",
       address: "Uttara, Dhaka",
+      deliveryZone: "inside_dhaka",
       items: [
         {
           productId: 4,

@@ -15,7 +15,8 @@ const initialForm = {
   images: "",
   accent: "from-slate-200 via-white to-white",
   featured: false,
-  sku: ""
+  sku: "",
+  availableSizes: ""
 };
 
 export function AdminProductsManager({ initialProducts }: { initialProducts: Product[] }) {
@@ -43,7 +44,8 @@ export function AdminProductsManager({ initialProducts }: { initialProducts: Pro
       images: product.images.join("\n"),
       accent: product.accent,
       featured: product.featured,
-      sku: product.sku
+      sku: product.sku,
+      availableSizes: product.availableSizes.join("\n")
     });
   }
 
@@ -114,6 +116,10 @@ export function AdminProductsManager({ initialProducts }: { initialProducts: Pro
       images: form.images
         .split("\n")
         .map((image) => image.trim())
+        .filter(Boolean),
+      availableSizes: form.availableSizes
+        .split(/[\n,]+/)
+        .map((size) => size.trim().toUpperCase())
         .filter(Boolean)
     };
 
@@ -245,6 +251,25 @@ export function AdminProductsManager({ initialProducts }: { initialProducts: Pro
             </span>
           </label>
           <label className="grid gap-2 text-sm font-medium text-slate-700">
+            Available Sizes
+            <textarea
+              rows={4}
+              value={form.availableSizes}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  availableSizes: event.target.value
+                }))
+              }
+              placeholder={"Optional sizes, one per line or comma separated\nM\nL\nXL\nXXL"}
+              className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
+            />
+            <span className="text-xs text-slate-500">
+              Leave empty for products without sizes. For shirts, shoes, or clothing,
+              add sizes like M, L, XL, XXL or 39, 40, 41.
+            </span>
+          </label>
+          <label className="grid gap-2 text-sm font-medium text-slate-700">
             Description
             <textarea
               required
@@ -326,6 +351,11 @@ export function AdminProductsManager({ initialProducts }: { initialProducts: Pro
                     <p className="font-medium text-ink">{product.name}</p>
                     <p className="text-slate-500">{product.category}</p>
                     <p className="text-slate-400">{product.images.length} images</p>
+                    <p className="text-slate-400">
+                      {product.availableSizes.length
+                        ? `Sizes: ${product.availableSizes.join(", ")}`
+                        : "No size selection"}
+                    </p>
                   </td>
                   <td className="py-4 text-slate-600">{product.sku}</td>
                   <td className="py-4 font-semibold text-pine">

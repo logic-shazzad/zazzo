@@ -104,11 +104,21 @@ export function AdminOrdersManager({ initialOrders }: { initialOrders: Order[] }
                     <p className="text-slate-500">{order.email || "No email provided"}</p>
                     <p className="text-slate-500">{order.phone}</p>
                     <p className="text-slate-500">{order.address}</p>
+                    <p className="text-slate-500">
+                      Delivery area:{" "}
+                      {order.deliveryZone === "outside_dhaka"
+                        ? "Outside Dhaka City Corporation"
+                        : "Inside Dhaka City Corporation"}
+                    </p>
                   </td>
                   <td className="py-4 align-top">
                     {order.items.map((item) => (
-                      <p key={`${order.id}-${item.productId}`} className="text-slate-600">
-                        {item.name} x {item.quantity}
+                      <p
+                        key={`${order.id}-${item.productId}-${item.size ?? "default"}`}
+                        className="text-slate-600"
+                      >
+                        {item.name}
+                        {item.size ? ` (${item.size})` : ""} x {item.quantity}
                       </p>
                     ))}
                   </td>

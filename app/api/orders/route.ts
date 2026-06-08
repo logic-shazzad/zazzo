@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { jsonError } from "@/lib/api-response";
 import { createOrder, getStoreSnapshot } from "@/lib/store";
-import { CartItem, CreateOrderInput } from "@/lib/types";
+import { CartItem, CreateOrderInput, DeliveryZone } from "@/lib/types";
 
 export async function GET() {
   try {
@@ -21,6 +21,8 @@ export async function POST(request: Request) {
       phone: String(body.phone ?? "").trim(),
       address: String(body.address ?? "").trim(),
       paymentMethod: String(body.paymentMethod ?? "Cash on Delivery").trim(),
+      deliveryZone:
+        body.deliveryZone === "outside_dhaka" ? "outside_dhaka" : ("inside_dhaka" as DeliveryZone),
       items: Array.isArray(body.items) ? (body.items as CartItem[]) : []
     };
 

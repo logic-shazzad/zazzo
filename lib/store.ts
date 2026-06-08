@@ -5,6 +5,7 @@ import {
   CreateOrderInput,
   Customer,
   DashboardSummary,
+  DeliveryZone,
   DeliveryStatus,
   HomepageCollectionCard,
   ModeratorUser,
@@ -67,7 +68,8 @@ const defaultHeroDescription =
   "Discover trend-forward shirts, pants, sarees, and everyday fashion essentials with a storefront designed to feel modern, fast, and easy to shop.";
 
 const defaultSettings: StoreSettings = {
-  deliveryCharge: 120
+  insideDhakaDeliveryCharge: 120,
+  outsideDhakaDeliveryCharge: 120
 };
 
 const defaultBranding: StoreBranding = {
@@ -112,8 +114,15 @@ function normalizeProduct(product: Product & { image?: string; images?: string[]
 
   return {
     ...product,
-    images
+    images,
+    availableSizes: Array.isArray(product.availableSizes)
+      ? product.availableSizes.map((size) => size.trim()).filter(Boolean)
+      : []
   };
+}
+
+function normalizeDeliveryZone(zone?: string): DeliveryZone {
+  return zone === "outside_dhaka" ? "outside_dhaka" : "inside_dhaka";
 }
 
 function normalizeStore(data: StoreData & {
@@ -121,16 +130,34 @@ function normalizeStore(data: StoreData & {
   heroDescription?: string;
   branding?: Partial<StoreBranding>;
   moderators?: ModeratorUser[];
+  settings?: Partial<StoreSettings> & { deliveryCharge?: number };
+  orders: Array<Order & { deliveryZone?: string }>;
 }): StoreData {
+  const legacyDeliveryCharge =
+    typeof data.settings?.deliveryCharge === "number" ? data.settings.deliveryCharge : undefined;
+
   return {
     ...data,
     products: data.products.map(normalizeProduct),
+    orders: data.orders.map((order) => ({
+      ...order,
+      deliveryZone: normalizeDeliveryZone(order.deliveryZone)
+    })),
     heroDescription: data.heroDescription?.trim() || defaultHeroDescription,
     homepageCollections:
       data.homepageCollections && data.homepageCollections.length
         ? data.homepageCollections
         : defaultHomepageCollections,
-    settings: data.settings ?? defaultSettings,
+    settings: {
+      insideDhakaDeliveryCharge:
+        data.settings?.insideDhakaDeliveryCharge ??
+        legacyDeliveryCharge ??
+        defaultSettings.insideDhakaDeliveryCharge,
+      outsideDhakaDeliveryCharge:
+        data.settings?.outsideDhakaDeliveryCharge ??
+        legacyDeliveryCharge ??
+        defaultSettings.outsideDhakaDeliveryCharge
+    },
     branding: {
       ...defaultBranding,
       ...(data.branding ?? {})
@@ -595,14 +622,20 @@ export async function updateHomepageCollections(
 
 export async function updateStoreSettings(settings: StoreSettings) {
   return queueWrite((store) => {
-    const deliveryCharge = Number(settings.deliveryCharge);
+    const insideDhakaDeliveryCharge = Number(settings.insideDhakaDeliveryCharge);
+    const outsideDhakaDeliveryCharge = Number(settings.outsideDhakaDeliveryCharge);
 
-    if (!Number.isFinite(deliveryCharge) || deliveryCharge < 0) {
-      throw new Error("Delivery charge must be a valid number.");
+    if (!Number.isFinite(insideDhakaDeliveryCharge) || insideDhakaDeliveryCharge < 0) {
+      throw new Error("Inside Dhaka delivery charge must be a valid number.");
+    }
+
+    if (!Number.isFinite(outsideDhakaDeliveryCharge) || outsideDhakaDeliveryCharge < 0) {
+      throw new Error("Outside Dhaka delivery charge must be a valid number.");
     }
 
     store.settings = {
-      deliveryCharge
+      insideDhakaDeliveryCharge,
+      outsideDhakaDeliveryCharge
     };
 
     return store.settings;
@@ -697,12 +730,21 @@ export async function deleteModeratorUser(id: string) {
   });
 }
 
-function shippingCost(deliveryCharge: number, subtotal: number) {
+function shippingCost(
+  settings: StoreSettings,
+  deliveryZone: DeliveryZone,
+  subtotal: number
+) {
   if (subtotal <= 0) {
     return 0;
   }
 
-  return Math.max(0, deliveryCharge);
+  const charge =
+    deliveryZone === "inside_dhaka"
+      ? settings.insideDhakaDeliveryCharge
+      : settings.outsideDhakaDeliveryCharge;
+
+  return Math.max(0, charge);
 }
 
 export async function createOrder(input: CreateOrderInput) {
@@ -722,9 +764,21 @@ export async function createOrder(input: CreateOrderInput) {
         throw new Error(`Insufficient stock for ${product.name}.`);
       }
 
+      const selectedSize = cartItem.size?.trim();
+      if (product.availableSizes.length) {
+        if (!selectedSize) {
+          throw new Error(`Please select a size for ${product.name}.`);
+        }
+
+        if (!product.availableSizes.includes(selectedSize)) {
+          throw new Error(`Selected size is not available for ${product.name}.`);
+        }
+      }
+
       return {
         product,
-        quantity: cartItem.quantity
+        quantity: cartItem.quantity,
+        size: selectedSize
       };
     });
 
@@ -732,7 +786,7 @@ export async function createOrder(input: CreateOrderInput) {
       (sum, item) => sum + item.product.price * item.quantity,
       0
     );
-    const shipping = shippingCost(store.settings.deliveryCharge, subtotal);
+    const shipping = shippingCost(store.settings, input.deliveryZone, subtotal);
     const total = subtotal + shipping;
     const normalizedEmail = input.email.trim().toLowerCase();
     const normalizedPhone = input.phone.trim();
@@ -769,11 +823,13 @@ export async function createOrder(input: CreateOrderInput) {
       email: input.email,
       phone: input.phone,
       address: input.address,
+      deliveryZone: input.deliveryZone,
       items: items.map((item) => ({
         productId: item.product.id,
         name: item.product.name,
         price: item.product.price,
-        quantity: item.quantity
+        quantity: item.quantity,
+        size: item.size
       })),
       subtotal,
       shipping,

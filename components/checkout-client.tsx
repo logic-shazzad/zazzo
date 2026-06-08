@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart-provider";
 import { formatCurrency } from "@/lib/currency";
-import { Product, StoreSettings } from "@/lib/types";
+import { DeliveryZone, Product, StoreSettings } from "@/lib/types";
 
 export function CheckoutClient({
   products,
@@ -24,21 +24,27 @@ export function CheckoutClient({
     email: "",
     phone: "",
     address: "",
-    paymentMethod: "Cash on Delivery"
+    paymentMethod: "Cash on Delivery",
+    deliveryZone: "inside_dhaka" as DeliveryZone
   });
 
   const cartRows = items
     .map((item) => {
       const product = products.find((entry) => entry.id === item.productId);
-      return product ? { product, quantity: item.quantity } : null;
+      return product ? { product, quantity: item.quantity, size: item.size } : null;
     })
-    .filter(Boolean) as { product: Product; quantity: number }[];
+    .filter(Boolean) as { product: Product; quantity: number; size?: string }[];
 
   const subtotal = cartRows.reduce(
     (sum, row) => sum + row.product.price * row.quantity,
     0
   );
-  const shipping = subtotal === 0 ? 0 : settings.deliveryCharge;
+  const shipping =
+    subtotal === 0
+      ? 0
+      : form.deliveryZone === "inside_dhaka"
+        ? settings.insideDhakaDeliveryCharge
+        : settings.outsideDhakaDeliveryCharge;
   const total = subtotal + shipping;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -143,6 +149,22 @@ export function CheckoutClient({
               </label>
             ))}
             <label className="grid gap-2 text-sm font-medium text-slate-700">
+              Delivery Area
+              <select
+                value={form.deliveryZone}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    deliveryZone: event.target.value as DeliveryZone
+                  }))
+                }
+                className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
+              >
+                <option value="inside_dhaka">Inside Dhaka City Corporation</option>
+                <option value="outside_dhaka">Outside Dhaka City Corporation</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-medium text-slate-700">
               Payment Method
               <select
                 value={form.paymentMethod}
@@ -185,13 +207,14 @@ export function CheckoutClient({
                 No items in cart yet. Add products first, then come back to checkout.
               </p>
             ) : (
-              cartRows.map(({ product, quantity }) => (
+              cartRows.map(({ product, quantity, size }) => (
                 <div
-                  key={product.id}
+                  key={`${product.id}-${size ?? "default"}`}
                   className="flex items-center justify-between text-sm text-slate-600"
                 >
                   <span>
-                    {product.name} x {quantity}
+                    {product.name}
+                    {size ? ` (${size})` : ""} x {quantity}
                   </span>
                   <span className="font-semibold text-ink">
                     {formatCurrency(product.price * quantity)}
@@ -210,6 +233,14 @@ export function CheckoutClient({
                 <span>Shipping</span>
                 <span className="font-semibold text-ink">{formatCurrency(shipping)}</span>
               </div>
+              <div className="flex items-center justify-between">
+                <span>Delivery Area</span>
+                <span className="font-semibold text-ink">
+                  {form.deliveryZone === "inside_dhaka"
+                    ? "Inside Dhaka City Corporation"
+                    : "Outside Dhaka City Corporation"}
+                </span>
+              </div>
             </div>
             <div className="mt-5 flex items-center justify-between">
               <span className="text-base text-slate-600">Total</span>
@@ -217,7 +248,7 @@ export function CheckoutClient({
             </div>
             <p className="mt-4 text-sm leading-6 text-slate-500">
               Taxes are included in product pricing. Delivery charge is applied once
-              per order based on your current admin settings.
+              per order based on the area selected by the customer.
             </p>
           </div>
         </aside>
