@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/currency";
 import { StoreSettings } from "@/lib/types";
 
@@ -17,6 +18,8 @@ export function AdminSettingsManager({
   );
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const router = useRouter();
+  const [, startTransition] = useTransition();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -49,6 +52,10 @@ export function AdminSettingsManager({
     setOutsideDhakaDeliveryCharge(String(data.settings.outsideDhakaDeliveryCharge));
     setSaving(false);
     setMessage("Delivery charge updated successfully.");
+
+    startTransition(() => {
+      router.refresh();
+    });
   }
 
   return (

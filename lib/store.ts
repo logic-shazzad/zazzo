@@ -184,6 +184,22 @@ async function getMongoClient() {
 }
 
 function fallbackStoreData() {
+  return normalizeSeedStore();
+}
+
+async function readLocalStoreFile() {
+  try {
+    const raw = await fs.readFile(storeFile, "utf8");
+    return JSON.parse(raw) as StoreData & {
+      products: Array<Product & { image?: string; images?: string[] }>;
+      heroDescription?: string;
+    };
+  } catch {
+    return null;
+  }
+}
+
+function normalizeSeedStore() {
   return normalizeStore(seedData as StoreData & {
     products: Array<Product & { image?: string; images?: string[] }>;
     heroDescription?: string;
@@ -261,7 +277,10 @@ export async function readStore(): Promise<StoreData> {
     } catch (error) {
       if (isProduction || isServerlessDeployment) {
         console.error("MongoDB read failed. Falling back to seed data.", error);
-        return fallbackStoreData();
+        const localStore = await readLocalStoreFile();
+        return localStore
+          ? normalizeStore(localStore)
+          : fallbackStoreData();
       }
 
       throw toStoreUnavailableError(error);
@@ -288,6 +307,8 @@ async function writeStore(data: StoreData) {
         { _id: storeDocumentId, ...data } as MongoStoreRecord,
         { upsert: true }
       );
+      await fs.mkdir(path.dirname(storeFile), { recursive: true });
+      await fs.writeFile(storeFile, JSON.stringify(data, null, 2), "utf8");
     } catch (error) {
       throw toStoreUnavailableError(error);
     }
