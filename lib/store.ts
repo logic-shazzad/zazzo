@@ -199,6 +199,11 @@ async function readLocalStoreFile() {
   }
 }
 
+async function writeLocalStoreFile(data: StoreData) {
+  await fs.mkdir(path.dirname(storeFile), { recursive: true });
+  await fs.writeFile(storeFile, JSON.stringify(data, null, 2), "utf8");
+}
+
 function normalizeSeedStore() {
   return normalizeStore(seedData as StoreData & {
     products: Array<Product & { image?: string; images?: string[] }>;
@@ -307,15 +312,20 @@ async function writeStore(data: StoreData) {
         { _id: storeDocumentId, ...data } as MongoStoreRecord,
         { upsert: true }
       );
-      await fs.mkdir(path.dirname(storeFile), { recursive: true });
-      await fs.writeFile(storeFile, JSON.stringify(data, null, 2), "utf8");
+      await writeLocalStoreFile(data);
     } catch (error) {
+      if (isProduction || isServerlessDeployment) {
+        console.warn("MongoDB write failed. Saving to local store mirror instead.", error);
+        await writeLocalStoreFile(data);
+        return;
+      }
+
       throw toStoreUnavailableError(error);
     }
     return;
   }
 
-  await fs.writeFile(storeFile, JSON.stringify(data, null, 2), "utf8");
+  await writeLocalStoreFile(data);
 }
 
 async function queueWrite<T>(operation: (store: StoreData) => T | Promise<T>) {

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BrandIcon } from "@/components/brand-icon";
 import { useCart } from "@/components/cart-provider";
 import { ZazzoLogo } from "@/components/zazzo-logo";
 
@@ -16,21 +15,12 @@ const links = [
 export function SiteHeader() {
   const pathname = usePathname();
   const { count } = useCart();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 lg:bg-white/90 lg:backdrop-blur-md">
       <div className="shell">
         <div className="flex items-center justify-between gap-3 py-3 sm:gap-4 sm:py-4">
           <ZazzoLogo withLink showTagline />
-          <button
-            type="button"
-            onClick={() => setMenuOpen((current) => !current)}
-            className="inline-flex items-center justify-center lg:hidden"
-            aria-label="Toggle menu"
-          >
-            <BrandIcon size={36} circle />
-          </button>
           <nav className="hidden items-center gap-2 text-sm font-medium text-slate-600 lg:flex">
             {links.map((link) => {
               const active = pathname === link.href;
@@ -54,17 +44,16 @@ export function SiteHeader() {
             </Link>
           </nav>
         </div>
-        {menuOpen ? (
-          <nav className="grid gap-2 border-t border-slate-200 py-4 lg:hidden">
+        <nav className="border-t border-slate-200 py-3 lg:hidden">
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {links.map((link) => {
               const active = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                    active ? "bg-[#111111] text-white" : "bg-slate-50 text-slate-700"
+                  className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition ${
+                    active ? "bg-[#111111] text-white" : "bg-slate-100 text-slate-600"
                   }`}
                 >
                   {link.label}
@@ -73,13 +62,12 @@ export function SiteHeader() {
             })}
             <Link
               href="/cart"
-              onClick={() => setMenuOpen(false)}
-              className="rounded-2xl bg-[#F5B800] px-4 py-3 text-sm font-semibold text-[#111111]"
+              className="shrink-0 rounded-full bg-[#F5B800] px-4 py-2.5 text-sm font-semibold text-[#111111] transition"
             >
               Bag ({count})
             </Link>
-          </nav>
-        ) : null}
+          </div>
+        </nav>
       </div>
     </header>
   );
