@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { MongoClient } from "mongodb";
+import { cache } from "react";
 import {
   CreateOrderInput,
   Customer,
@@ -38,6 +39,9 @@ const storeUnavailableMessage =
 
 let writeQueue = Promise.resolve();
 let mongoClientPromise: Promise<MongoClient> | null = null;
+let storeCache: { data: StoreData; expiresAt: number } | null = null;
+let storeReadPromise: Promise<StoreData> | null = null;
+const storeCacheTtlMs = 5000;
 type MongoStoreRecord = StoreData & { _id: string };
 
 const defaultHomepageCollections: HomepageCollectionCard[] = [
@@ -261,7 +265,7 @@ async function ensureMongoStore() {
   });
 }
 
-export async function readStore(): Promise<StoreData> {
+async function readStoreUncached(): Promise<StoreData> {
   if (mongoUri) {
     try {
       await ensureMongoStore();
@@ -302,6 +306,32 @@ export async function readStore(): Promise<StoreData> {
   return normalizeStore(parsed);
 }
 
+function cacheStore(data: StoreData) {
+  storeCache = {
+    data: cloneStore(data),
+    expiresAt: Date.now() + storeCacheTtlMs
+  };
+}
+
+export async function readStore(): Promise<StoreData> {
+  if (storeCache && storeCache.expiresAt > Date.now()) {
+    return cloneStore(storeCache.data);
+  }
+
+  if (!storeReadPromise) {
+    storeReadPromise = readStoreUncached().then((data) => {
+      cacheStore(data);
+      return data;
+    });
+  }
+
+  try {
+    return cloneStore(await storeReadPromise);
+  } finally {
+    storeReadPromise = null;
+  }
+}
+
 async function writeStore(data: StoreData) {
   if (mongoUri) {
     try {
@@ -313,10 +343,12 @@ async function writeStore(data: StoreData) {
         { upsert: true }
       );
       await writeLocalStoreFile(data);
+      cacheStore(data);
     } catch (error) {
       if (isProduction || isServerlessDeployment) {
         console.warn("MongoDB write failed. Saving to local store mirror instead.", error);
         await writeLocalStoreFile(data);
+        cacheStore(data);
         return;
       }
 
@@ -326,6 +358,7 @@ async function writeStore(data: StoreData) {
   }
 
   await writeLocalStoreFile(data);
+  cacheStore(data);
 }
 
 async function queueWrite<T>(operation: (store: StoreData) => T | Promise<T>) {
@@ -414,7 +447,7 @@ function isSameMonth(date: Date, reference: Date) {
   );
 }
 
-export async function getStoreSnapshot() {
+export const getStoreSnapshot = cache(async function getStoreSnapshot() {
   const store = await readStore();
 
   const featuredProducts = store.products.filter((product) => product.featured);
@@ -432,7 +465,7 @@ export async function getStoreSnapshot() {
     recentOrders,
     totalRevenue
   };
-}
+});
 
 export async function getDashboardSummary(): Promise<DashboardSummary> {
   const store = await readStore();
