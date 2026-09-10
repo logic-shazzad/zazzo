@@ -53,8 +53,12 @@ export function SiteHeader() {
   useEffect(() => {
     fetch("/api/products")
       .then((response) => (response.ok ? response.json() : null))
-      .then((data: { products?: Product[] } | null) => {
-        if (data?.products) setProducts(data.products);
+      .then((data: Product[] | { products?: Product[] } | null) => {
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (data?.products) {
+          setProducts(data.products);
+        }
       })
       .catch(() => undefined);
   }, []);
