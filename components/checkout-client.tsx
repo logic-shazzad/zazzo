@@ -87,7 +87,7 @@ export function CheckoutClient({
   }
 
   return (
-    <main className="shell py-12">
+    <main className="shell min-w-0 overflow-x-clip py-8 sm:py-12">
       {successMessage ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-xl rounded-[28px] bg-white p-6 shadow-2xl sm:p-8">
@@ -109,12 +109,12 @@ export function CheckoutClient({
         </div>
       ) : null}
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.85fr]">
-        <section className="panel p-8">
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[1fr_0.85fr]">
+        <section className="panel min-w-0 p-5 sm:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-coral">
             Checkout
           </p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-ink">
+          <h1 className="mt-4 break-words text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Complete shipping details and confirm the payment method.
           </h1>
           <p className="mt-4 text-sm leading-6 text-slate-600">
@@ -128,7 +128,7 @@ export function CheckoutClient({
               ["phone", "Phone Number"],
               ["address", "Shipping Address"]
             ].map(([key, label]) => (
-              <label key={key} className="grid gap-2 text-sm font-medium text-slate-700">
+            <label key={key} className="grid min-w-0 gap-2 text-sm font-medium text-slate-700">
                 {label}
                 <input
                   required={key !== "email"}
@@ -139,7 +139,7 @@ export function CheckoutClient({
                       [key]: event.target.value
                     }))
                   }
-                  className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
+                  className="w-full min-w-0 rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
                   placeholder={
                     key === "email"
                       ? "Enter email address (optional)"
@@ -148,7 +148,7 @@ export function CheckoutClient({
                 />
               </label>
             ))}
-            <label className="grid gap-2 text-sm font-medium text-slate-700">
+            <label className="grid min-w-0 gap-2 text-sm font-medium text-slate-700">
               Delivery Area
               <select
                 value={form.deliveryZone}
@@ -158,13 +158,13 @@ export function CheckoutClient({
                     deliveryZone: event.target.value as DeliveryZone
                   }))
                 }
-                className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
+                className="w-full min-w-0 rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
               >
                 <option value="inside_dhaka">Inside Dhaka City Corporation</option>
                 <option value="outside_dhaka">Outside Dhaka City Corporation</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-medium text-slate-700">
+            <label className="grid min-w-0 gap-2 text-sm font-medium text-slate-700">
               Payment Method
               <select
                 value={form.paymentMethod}
@@ -174,7 +174,7 @@ export function CheckoutClient({
                     paymentMethod: event.target.value
                   }))
                 }
-                className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
+                className="w-full min-w-0 rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-pine"
               >
                 <option>Cash on Delivery</option>
                 <option>bKash</option>
@@ -199,7 +199,7 @@ export function CheckoutClient({
           </form>
         </section>
 
-        <aside className="panel p-8">
+        <aside className="panel min-w-0 p-5 sm:p-8">
           <h2 className="text-2xl font-semibold text-ink">Final Order Summary</h2>
           <div className="mt-6 space-y-4">
             {cartRows.length === 0 ? (

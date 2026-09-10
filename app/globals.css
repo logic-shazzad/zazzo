@@ -17,6 +17,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     linear-gradient(180deg, rgba(255, 251, 238, 0.92), rgba(255, 255, 255, 0.99)),
     #f8f6f1;
@@ -30,7 +31,7 @@ a {
 }
 
 .shell {
-  @apply mx-auto w-full max-w-7xl px-3 sm:px-6 lg:px-8;
+  @apply mx-auto min-w-0 w-full max-w-7xl px-3 sm:px-6 lg:px-8;
 }
 
 .panel {

@@ -1,7 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getAdminRoleFromCookies } from "@/lib/admin-auth";
 import { AdminLogoutButton } from "@/components/admin-logout-button";
 import { AdminSidebar } from "@/components/admin-sidebar";
+
+export const metadata: Metadata = {
+  title: "Admin Panel",
+  robots: { index: false, follow: false }
+};
 
 export default async function AdminLayout({
   children

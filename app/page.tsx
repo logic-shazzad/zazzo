@@ -1,11 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ProductCard } from "@/components/product-card";
 import { SectionTitle } from "@/components/section-title";
 import { SiteHeader } from "@/components/site-header";
 import { getStoreSnapshot } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Modern Fashion for Everyday Confidence",
+  description:
+    "Shop ZAZZO for trend-forward fashion, sneakers, bags, home decor, and everyday essentials in Bangladesh."
+};
 
 export default async function HomePage() {
   const snapshot = await getStoreSnapshot();

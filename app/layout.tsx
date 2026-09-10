@@ -7,9 +7,39 @@ import "./globals.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "ZAZZO",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://zazzo-zazzo.vercel.app"),
+  title: {
+    default: "ZAZZO | Modern Fashion & Everyday Essentials",
+    template: "%s | ZAZZO"
+  },
   description:
-    "ZAZZO is a clean modern ecommerce storefront with a private admin dashboard.",
+    "Shop trend-forward fashion, bags, sneakers, home decor, and everyday essentials from ZAZZO.",
+  keywords: ["ZAZZO", "online fashion store", "fashion Bangladesh", "clothing", "bags", "sneakers"],
+  authors: [{ name: "ZAZZO" }],
+  creator: "ZAZZO",
+  openGraph: {
+    type: "website",
+    siteName: "ZAZZO",
+    title: "ZAZZO | Modern Fashion & Everyday Essentials",
+    description:
+      "Discover refined fashion and everyday essentials with a clean, fast shopping experience."
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ZAZZO | Modern Fashion & Everyday Essentials",
+    description:
+      "Discover refined fashion and everyday essentials with a clean, fast shopping experience."
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1
+    }
+  },
   icons: {
     icon: "/icon"
   }

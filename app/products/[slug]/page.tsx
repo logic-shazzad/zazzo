@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
@@ -7,6 +8,30 @@ import { formatCurrency } from "@/lib/currency";
 import { getStoreSnapshot } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const snapshot = await getStoreSnapshot();
+  const product = snapshot.products.find((item) => item.slug === slug);
+
+  if (!product) return {};
+
+  return {
+    title: product.name,
+    description: product.description,
+    alternates: { canonical: `/products/${product.slug}` },
+    openGraph: {
+      type: "website",
+      title: product.name,
+      description: product.description,
+      images: product.images[0] ? [{ url: product.images[0], alt: product.name }] : []
+    }
+  };
+}
 
 export default async function ProductDetailsPage({
   params
@@ -76,6 +101,35 @@ export default async function ProductDetailsPage({
             </p>
           </div>
         </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: product.name,
+              description: product.description,
+              image: product.images,
+              sku: product.sku,
+              category: product.category,
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: product.rating,
+                ratingCount: 1
+              },
+              offers: {
+                "@type": "Offer",
+                price: product.price,
+                priceCurrency: "BDT",
+                availability:
+                  product.inventory > 0
+                    ? "https://schema.org/InStock"
+                    : "https://schema.org/OutOfStock"
+              }
+            })
+          }}
+        />
 
         {relatedProducts.length ? (
           <section className="mt-16">

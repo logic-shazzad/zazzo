@@ -1,9 +1,16 @@
 import { ProductCard } from "@/components/product-card";
+import type { Metadata } from "next";
 import { SectionTitle } from "@/components/section-title";
 import { SiteHeader } from "@/components/site-header";
 import { getStoreSnapshot } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Shop Fashion, Bags, Sneakers & Essentials",
+  description:
+    "Explore the ZAZZO catalog and find refined fashion, bags, sneakers, home decor, and everyday essentials."
+};
 
 export default async function ProductsPage() {
   const snapshot = await getStoreSnapshot();
