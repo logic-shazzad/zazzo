@@ -18,13 +18,13 @@ export default async function ProductsPage() {
   return (
     <>
       <SiteHeader />
-      <main className="shell py-12">
+      <main className="shell min-w-0 overflow-x-clip py-8 sm:py-12">
         <SectionTitle
           eyebrow="Catalog"
           title="Find the styles you love and add them to your bag instantly."
           description="Explore the full ZAZZO collection with clean visuals, easy browsing, and quick shopping actions built to make customers feel confident and excited."
         />
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid min-w-0 gap-6 sm:mt-10 md:grid-cols-2 xl:grid-cols-4">
           {snapshot.products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

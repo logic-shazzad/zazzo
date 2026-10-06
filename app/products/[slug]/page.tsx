@@ -57,24 +57,24 @@ export default async function ProductDetailsPage({
   return (
     <>
       <SiteHeader />
-      <main className="shell py-12">
-        <div className="grid gap-8 lg:grid-cols-2">
+      <main className="shell min-w-0 py-8 sm:py-12">
+        <div className="grid min-w-0 gap-6 sm:gap-8 lg:grid-cols-2">
           <ProductGallery
             images={product.images}
             name={product.name}
             accent={product.accent}
           />
-          <div className="panel p-8">
+          <div className="panel min-w-0 p-5 sm:p-8">
             <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-600">
               {product.category}
             </span>
-            <h1 className="mt-5 text-4xl font-semibold tracking-tight text-ink">
+            <h1 className="mt-5 break-words text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
               {product.name}
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               {product.description}
             </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-4">
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div className="rounded-2xl bg-slate-50 p-4">
                 <p className="text-sm text-slate-500">Price</p>
                 <p className="mt-2 text-2xl font-semibold text-pine">

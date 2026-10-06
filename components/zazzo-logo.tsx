@@ -24,7 +24,7 @@ function LogoInner({
         >
           ZAZZO
         </span>
-        {showTagline ? (
+        {showTagline && !compact ? (
           <span
             className={`text-[0.68rem] uppercase tracking-[0.28em] ${
               dark ? "text-white/70" : "text-slate-400"

@@ -6,7 +6,7 @@ import { Product } from "@/lib/types";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="group overflow-hidden rounded-[24px] border border-slate-200/80 bg-white shadow-soft transition duration-300 hover:shadow-[0_20px_50px_rgba(31,41,51,0.10)] sm:rounded-[30px] sm:hover:-translate-y-1 sm:hover:shadow-[0_24px_70px_rgba(31,41,51,0.12)]">
+    <article className="group min-w-0 overflow-hidden rounded-[24px] border border-slate-200/80 bg-white shadow-soft transition duration-300 hover:shadow-[0_20px_50px_rgba(31,41,51,0.10)] sm:rounded-[30px] sm:hover:-translate-y-1 sm:hover:shadow-[0_24px_70px_rgba(31,41,51,0.12)]">
       <Link href={`/products/${product.slug}`} className="block">
         <div className={`bg-gradient-to-br ${product.accent} p-3.5 sm:p-5`}>
           <div className="relative h-52 overflow-hidden rounded-[18px] bg-white/90 sm:h-64 sm:rounded-[24px]">
@@ -22,7 +22,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </Link>
-      <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
+      <div className="min-w-0 space-y-3 p-4 sm:space-y-4 sm:p-6">
         <div className="flex items-center justify-between gap-3">
           <span className="rounded-full bg-sand px-3 py-1 text-xs font-medium text-slate-700">
             {product.category}
@@ -37,13 +37,14 @@ export function ProductCard({ product }: { product: Product }) {
             </p>
           </Link>
         </div>
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-xl font-semibold text-pine sm:text-2xl">{formatCurrency(product.price)}</span>
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <span className="shrink-0 text-xl font-semibold text-pine sm:text-2xl">{formatCurrency(product.price)}</span>
           <AddToCartButton
             productId={product.id}
             compact
             requiresSize={product.availableSizes.length > 0}
-            redirectHref={`/products/${product.slug}`}
+            sizeOptions={product.availableSizes}
+            productName={product.name}
           />
         </div>
       </div>

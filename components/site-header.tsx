@@ -82,10 +82,15 @@ export function SiteHeader() {
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-amber-950/10 bg-white/80 backdrop-blur-md transition-all">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between gap-4">
-            <div className="flex items-center gap-6">
-              <ZazzoLogo withLink showTagline />
+        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+          <div className="flex h-20 min-w-0 items-center justify-between gap-2 sm:gap-4">
+            <div className="min-w-0 shrink overflow-hidden">
+              <span className="sm:hidden">
+                <ZazzoLogo withLink compact />
+              </span>
+              <span className="hidden sm:inline-flex">
+                <ZazzoLogo withLink showTagline />
+              </span>
             </div>
 
             <nav className="hidden items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50/80 p-1.5 text-sm font-medium text-slate-600 shadow-inner lg:flex">
@@ -109,11 +114,11 @@ export function SiteHeader() {
               })}
             </nav>
 
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={() => setCartOpen(true)}
-                className="relative inline-flex items-center gap-2.5 rounded-full border border-amber-300/80 bg-amber-400 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-md active:translate-y-0"
+                className="relative inline-flex items-center gap-2 rounded-full border border-amber-300/80 bg-amber-400 px-3.5 py-2.5 text-sm font-bold text-slate-950 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-md active:translate-y-0 sm:gap-2.5 sm:px-5"
                 aria-label={`Shopping bag with ${count} items`}
               >
                 <HeaderIcon name="bag" className="h-5 w-5" />
@@ -126,7 +131,7 @@ export function SiteHeader() {
               <button
                 type="button"
                 onClick={() => setMenuOpen(true)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors duration-200 hover:bg-slate-50 hover:text-slate-950 active:scale-95 lg:hidden"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-xs transition-colors duration-200 hover:bg-slate-50 hover:text-slate-950 active:scale-95 lg:hidden"
                 aria-label="Open navigation drawer"
               >
                 <HeaderIcon name="menu" className="h-6 w-6" />

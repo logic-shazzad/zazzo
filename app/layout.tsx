@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { CartProvider } from "@/components/cart-provider";
 import { RootChrome } from "@/components/root-chrome";
 import { getStoreSnapshot } from "@/lib/store";
@@ -43,6 +43,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon"
   }
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover"
 };
 
 export default function RootLayout({
